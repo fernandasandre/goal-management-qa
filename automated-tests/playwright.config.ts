@@ -7,7 +7,8 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:3000',
     trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
+    video: 'on',
   },
   projects: [
     { name: 'auth-setup', testDir: './fixtures', testMatch: 'auth.setup.ts' },
