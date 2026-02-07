@@ -23,7 +23,7 @@ test.describe('Goal Registration', () => {
     await goalRegistration.fill({ name: '', year: '2026' });
     await goalRegistration.save();
 
-    await expect(goalRegistration.validationError).toBeVisible();
+    await expect(goalRegistration.nameError).toBeVisible();
     await expect(goalRegistration.toast).not.toBeVisible();
   });
 });

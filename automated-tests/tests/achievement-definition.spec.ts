@@ -18,6 +18,6 @@ test.describe('Achievement Definition', () => {
     await achievement.setAchievement(0, 150);
     await achievement.save();
 
-    await expect(achievement.validationError).toHaveText(/between 0% and 100%/i);
+    await expect(achievement.achievementError(0)).toHaveText(/between 0% and 100%/i);
   });
 });

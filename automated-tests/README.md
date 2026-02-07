@@ -47,12 +47,12 @@ npm run format:check
 
 Every test execution generates the following artifacts automatically:
 
-| Artifact | When | Location |
-|----------|------|----------|
-| Screenshots | Every test (pass and fail) | `test-results/` |
-| Videos | Every test (pass and fail) | `test-results/` |
-| Traces | On failure only | `test-results/` |
-| HTML Report | Always | `playwright-report/` |
+| Artifact    | When                       | Location             |
+| ----------- | -------------------------- | -------------------- |
+| Screenshots | Every test (pass and fail) | `test-results/`      |
+| Videos      | Every test (pass and fail) | `test-results/`      |
+| Traces      | On failure only            | `test-results/`      |
+| HTML Report | Always                     | `playwright-report/` |
 
 All artifacts are attached to the HTML report and can be viewed with `npm run report`.
 
@@ -77,7 +77,7 @@ automated-tests/
 ├── fixtures/
 │   ├── auth.setup.ts   Authentication setup (runs once, saves storageState per role)
 │   └── base.fixture.ts Custom fixtures (page object injection)
-├── pages/              Page Object Models (one per module)
-├── test-data/          Centralized test data shared across specs
+├── pages/              Page Object Models (BasePage + one per module)
+├── test-data/          Centralized and typed test data (idempotent per run)
 └── tests/              Test suites (one per module)
 ```

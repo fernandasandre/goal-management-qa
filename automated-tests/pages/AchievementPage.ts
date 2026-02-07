@@ -1,27 +1,19 @@
 import type { Page, Locator } from '@playwright/test';
+import { BasePage } from './BasePage';
 
-export class AchievementPage {
-  private readonly saveButton: Locator;
+export class AchievementPage extends BasePage {
   readonly totalScore: Locator;
-  readonly toast: Locator;
-  readonly validationError: Locator;
 
-  constructor(private readonly page: Page) {
-    this.saveButton = page.getByRole('button', { name: /save/i });
+  constructor(page: Page) {
+    super(page, '/employee/achievements');
     this.totalScore = page.getByTestId('total-achievement');
-    this.toast = page.getByRole('alert');
-    this.validationError = page.locator('[data-testid$="-error"]');
   }
 
-  async goto() {
-    await this.page.goto('/employee/achievements');
+  achievementError(goalIndex: number): Locator {
+    return this.page.getByTestId(`achievement-${goalIndex}-error`);
   }
 
   async setAchievement(goalIndex: number, value: number) {
     await this.page.getByTestId(`achievement-${goalIndex}`).fill(String(value));
-  }
-
-  async save() {
-    await this.saveButton.click();
   }
 }
