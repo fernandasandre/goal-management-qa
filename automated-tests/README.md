@@ -28,22 +28,45 @@ npx playwright test tests/goal-registration.spec.ts
 
 # View HTML report after run
 npm run report
-
-# Run linter
-npm run lint
 ```
+
+## Code Quality
+
+```bash
+# Run ESLint (static analysis)
+npm run lint
+
+# Format all files with Prettier
+npm run format
+
+# Check formatting without modifying files (useful in CI)
+npm run format:check
+```
+
+## Test Evidence
+
+Every test execution generates the following artifacts automatically:
+
+| Artifact | When | Location |
+|----------|------|----------|
+| Screenshots | Every test (pass and fail) | `test-results/` |
+| Videos | Every test (pass and fail) | `test-results/` |
+| Traces | On failure only | `test-results/` |
+| HTML Report | Always | `playwright-report/` |
+
+All artifacts are attached to the HTML report and can be viewed with `npm run report`.
 
 ## Environment
 
 Copy `.env.example` to `.env` and adjust values as needed.
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `BASE_URL` | `http://localhost:3000` | Application URL |
-| `CI` | — | Enables retries (2) when set |
-| `ADMIN_EMAIL` | `admin@company.com` | Admin login email |
-| `MANAGER_EMAIL` | `manager@company.com` | Manager login email |
-| `EMPLOYEE_EMAIL` | `employee@company.com` | Employee login email |
+| Variable         | Default                 | Description                  |
+| ---------------- | ----------------------- | ---------------------------- |
+| `BASE_URL`       | `http://localhost:3000` | Application URL              |
+| `CI`             | —                       | Enables retries (2) when set |
+| `ADMIN_EMAIL`    | `admin@company.com`     | Admin login email            |
+| `MANAGER_EMAIL`  | `manager@company.com`   | Manager login email          |
+| `EMPLOYEE_EMAIL` | `employee@company.com`  | Employee login email         |
 
 Password variables follow the same pattern (`ADMIN_PASSWORD`, `MANAGER_PASSWORD`, `EMPLOYEE_PASSWORD`).
 
