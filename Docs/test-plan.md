@@ -15,7 +15,7 @@ Validate the three core modules of the employee goal management system: goal reg
 
 ### Out of Scope
 
-- Authentication and authorization flows (assumed functional)
+- Authentication and authorization **testing** (e.g., invalid credentials, password reset, session expiration). Authentication **setup** (login per role and storageState persistence) is part of the automated test infrastructure — see Section 3.
 - Performance and load testing
 - Mobile responsiveness
 - Accessibility compliance (WCAG)
@@ -25,6 +25,7 @@ Validate the three core modules of the employee goal management system: goal reg
 
 | Type | Approach | Coverage |
 |------|----------|----------|
+| Auth Setup | Playwright setup project (`auth.setup.ts`) | Login per role (Admin, Manager, Employee); storageState saved to `.auth/` and reused by all test projects |
 | Functional | Manual test scenarios | All 3 modules, 7 scenarios each |
 | E2E Automated | Playwright with TypeScript | 2-3 tests per module (happy path + negative) |
 | Boundary | Included in manual scenarios | Min/max goals, 0%-100% range |
@@ -35,6 +36,16 @@ Validate the three core modules of the employee goal management system: goal reg
 - **Browser:** Chromium (via Playwright)
 - **Base URL:** Configurable via `BASE_URL` env variable (default: `http://localhost:3000`)
 - **Test Data:** Centralized in `automated-tests/test-data/goals.ts`, consistent across manual and automated tests
+- **Authentication:** Each role (Admin, Manager, Employee) authenticates once via `auth.setup.ts`. Session is persisted to `.auth/<role>.json` using Playwright's `storageState` and loaded automatically by each test project. Credentials are configurable via environment variables (see `.env.example`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ADMIN_EMAIL` | `admin@company.com` | Admin login email |
+| `ADMIN_PASSWORD` | `admin123` | Admin login password |
+| `MANAGER_EMAIL` | `manager@company.com` | Manager login email |
+| `MANAGER_PASSWORD` | `manager123` | Manager login password |
+| `EMPLOYEE_EMAIL` | `employee@company.com` | Employee login email |
+| `EMPLOYEE_PASSWORD` | `employee123` | Employee login password |
 
 ## 5. Test Scenarios Summary
 
@@ -79,12 +90,15 @@ Validate the three core modules of the employee goal management system: goal reg
 - [ ] All three modules are deployed and accessible in the test environment
 - [ ] Test data (employees, goal catalog) is seeded or can be created through the Admin interface
 - [ ] User accounts for Admin, Manager, and Employee roles are available
+- [ ] Role credentials are configured in `.env` (or environment variables) matching the accounts above
+- [ ] Login page is accessible at `/login` with email/password fields and sign-in button
 - [ ] No critical blocking defects from previous test cycles
 
 ## 7. Exit Criteria
 
 - [ ] All 21 manual test scenarios executed
-- [ ] All 8 Playwright automated tests passing
+- [ ] All 3 auth setup tests passing (one per role: Admin, Manager, Employee)
+- [ ] All 8 Playwright spec tests passing (3 registration + 3 assignment + 2 achievement)
 - [ ] No Critical or Major severity bugs remaining open
 - [ ] All business rules validated (function match, year match, min/max goals, achievement range)
 - [ ] Test results documented with pass/fail status
@@ -93,6 +107,7 @@ Validate the three core modules of the employee goal management system: goal reg
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
+| Auth setup failure (invalid credentials, login page changes) | All automated tests blocked — no project runs without successful auth | Credentials externalized via env variables; auth runs as a dedicated Playwright project with clear error output; storageState files in `.auth/` can be inspected |
 | Test environment instability | Blocked test execution | Retry strategy in Playwright config; manual tests can proceed independently |
 | Missing test data / seed | Cannot execute assignment or achievement tests | Document seed data requirements; create setup script |
 | Cross-module rule ambiguity (optional vs required fields) | Uncertain expected results | Documented in TC-GA-007 with explicit cross-module rationale |

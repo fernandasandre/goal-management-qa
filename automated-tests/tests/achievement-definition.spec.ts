@@ -9,7 +9,7 @@ test.describe('Achievement Definition', () => {
     await achievement.setAchievement(2, 100);
     await achievement.save();
 
-    await expect(achievement.toast).toBeVisible();
+    await expect(achievement.toast).toHaveText(/achievements saved/i);
     await expect(achievement.totalScore).toContainText('80%');
   });
 
@@ -18,6 +18,6 @@ test.describe('Achievement Definition', () => {
     await achievement.setAchievement(0, 150);
     await achievement.save();
 
-    await expect(achievement.validationError).toBeVisible();
+    await expect(achievement.validationError).toHaveText(/between 0% and 100%/i);
   });
 });

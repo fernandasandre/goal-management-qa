@@ -13,7 +13,7 @@ test.describe('Goal Assignment', () => {
     await goalAssignment.save();
 
     await expect(goalAssignment.assignedGoals).toHaveCount(3);
-    await expect(goalAssignment.toast).toBeVisible();
+    await expect(goalAssignment.toast).toHaveText(/goals assigned/i);
   });
 
   test('blocks the 6th goal assignment when employee already has 5', async ({ goalAssignment }) => {
@@ -27,7 +27,7 @@ test.describe('Goal Assignment', () => {
 
     await goalAssignment.assignGoal(extraFinanceGoal);
 
-    await expect(goalAssignment.errorBanner).toBeVisible();
+    await expect(goalAssignment.errorBanner).toHaveText(/maximum.*5 goals/i);
     await expect(goalAssignment.assignedGoals).toHaveCount(5);
   });
 
@@ -36,6 +36,6 @@ test.describe('Goal Assignment', () => {
     await goalAssignment.selectEmployee(employees.finance.name);
     await goalAssignment.assignGoal(marketingGoal.name);
 
-    await expect(goalAssignment.errorBanner).toBeVisible();
+    await expect(goalAssignment.errorBanner).toHaveText(/function.*mismatch/i);
   });
 });

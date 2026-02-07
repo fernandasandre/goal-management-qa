@@ -1,22 +1,33 @@
 import { test as setup, type Page } from '@playwright/test';
 
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `Missing required environment variable: ${name}. ` +
+      'Copy .env.example to .env and fill in the credentials.',
+    );
+  }
+  return value;
+}
+
 const roles = {
   admin: {
-    email: process.env.ADMIN_EMAIL ?? 'admin@company.com',
-    password: process.env.ADMIN_PASSWORD ?? 'admin123',
+    email: requireEnv('ADMIN_EMAIL'),
+    password: requireEnv('ADMIN_PASSWORD'),
     landingUrl: '/admin/**',
   },
   manager: {
-    email: process.env.MANAGER_EMAIL ?? 'manager@company.com',
-    password: process.env.MANAGER_PASSWORD ?? 'manager123',
+    email: requireEnv('MANAGER_EMAIL'),
+    password: requireEnv('MANAGER_PASSWORD'),
     landingUrl: '/manager/**',
   },
   employee: {
-    email: process.env.EMPLOYEE_EMAIL ?? 'employee@company.com',
-    password: process.env.EMPLOYEE_PASSWORD ?? 'employee123',
+    email: requireEnv('EMPLOYEE_EMAIL'),
+    password: requireEnv('EMPLOYEE_PASSWORD'),
     landingUrl: '/employee/**',
   },
-} as const;
+};
 
 async function authenticateAs(page: Page, role: keyof typeof roles) {
   const { email, password, landingUrl } = roles[role];
